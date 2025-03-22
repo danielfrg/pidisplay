@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from inky.auto import auto
 
-from inkyweb.display.display import display_image_from_bytes
+from inkyweb.display.display import clear_display, display_image_from_bytes
 
 from loguru import logger
 
@@ -51,7 +51,6 @@ async def update_display(image: UploadFile = File(...)):
         logger.error("Error reading uploaded image", error=e)
         raise HTTPException(status_code=400, detail="Invalid image data")
 
-    if not display_image_from_bytes(inky, image_bytes):
-        raise HTTPException(status_code=500, detail="Display update failed")
-
+    clear_display(inky)
+    display_image_from_bytes(inky, image_bytes)
     return {"message": "Display updated"}

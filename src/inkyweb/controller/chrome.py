@@ -29,6 +29,7 @@ def take_screenshot(
         [
             f"--screenshot={img_file_path}",
             f"--window-size={dim[0]},{dim[1]}",
+            "--force-device-scale-factor=1",
             "--no-sandbox",
             "--disable-gpu",
             "--disable-software-rasterizer",
