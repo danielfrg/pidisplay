@@ -1,0 +1,22 @@
+[project]
+name = "inkyweb"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.115.11",
+    "loguru>=0.7.3",
+]
+
+[dependency-groups]
+dev = [
+    "ansible>=11.3.0",
+    "pyright>=1.1.397",
+    "ruff>=0.11.2",
+]
+display = [
+]
+controller = [
+    "httpx>=0.28.1",
+]
