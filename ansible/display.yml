@@ -1,0 +1,5 @@
+- hosts: display
+
+  roles:
+    - role: display 
+      tags: ["display"]
