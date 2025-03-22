@@ -51,6 +51,6 @@ async def update_display(image: UploadFile = File(...)):
         logger.error("Error reading uploaded image", error=e)
         raise HTTPException(status_code=400, detail="Invalid image data")
 
-    clear_display(inky)
+    # clear_display(inky)
     display_image_from_bytes(inky, image_bytes)
     return {"message": "Display updated"}
