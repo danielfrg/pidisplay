@@ -18,3 +18,19 @@
   shell: "curl -LsSf https://astral.sh/uv/install.sh | sh"
   args:
     creates: "{{ ansible_env.HOME }}/.local/bin/uv"
+
+- name: Enable I2C using raspi-config
+  command: "raspi-config nonint do_i2c 0"
+  become: yes
+
+- name: Enable SPI using raspi-config
+  command: "raspi-config nonint do_spi 0"
+  become: yes
+
+- name: Insert dtoverlay for spi0-0cs in config.txt
+  lineinfile:
+    path: /boot/firmware/config.txt
+    insertafter: '^dtparam=spi=on'
+    line: "dtoverlay=spi0-0cs"
+    state: present
+  become: yes

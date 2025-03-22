@@ -2,25 +2,41 @@ import os
 import tempfile
 import subprocess
 
+from typing import Optional, Tuple
+
 from loguru import logger
 
 
-def take_screenshot(url_or_path: str, dim: (int, int)) -> bytes:
+def take_screenshot(
+    url_or_path: str, dim: Tuple[int, int], binary="chrome-headless-shell"
+) -> Optional[bytes]:
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as img_file:
         img_file_path = img_file.name
 
+    logger.debug("Taking screenshot of %s to %s", url=url_or_path, path=img_file_path)
+
     command = [
-        "chromium-browser",
-        url_or_path,
-        "--headless=old",
-        f"--screenshot={img_file_path}",
-        f"--window-size={dim[0]},{dim[1]}",
-        "--no-sandbox",
-        "--disable-gpu",
-        "--disable-software-rasterizer",
-        "--disable-dev-shm-usage",
-        "--hide-scrollbars",
+        "chrome-headless-shell",
     ]
+
+    if binary == "chromium-browser":
+        command = [
+            "chromium-browser",
+            "--headless=old",
+        ]
+
+    command.extend(
+        [
+            f"--screenshot={img_file_path}",
+            f"--window-size={dim[0]},{dim[1]}",
+            "--no-sandbox",
+            "--disable-gpu",
+            "--disable-software-rasterizer",
+            "--disable-dev-shm-usage",
+            "--hide-scrollbars",
+            url_or_path,
+        ]
+    )
 
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
