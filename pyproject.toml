@@ -17,6 +17,7 @@ dev = [
 ]
 display = [
     "inky>=2.0.0; platform_system == 'Linux'",
+    "pillow>=11.1.0",
 ]
 controller = [
     "httpx>=0.28.1",
