@@ -48,7 +48,7 @@ async def update_display(image: UploadFile = File(...)):
     try:
         image_bytes = await image.read()
     except Exception as e:
-        logger.error("Error reading uploaded image: %s", e)
+        logger.error("Error reading uploaded image", error=e)
         raise HTTPException(status_code=400, detail="Invalid image data")
 
     if not display_image_from_bytes(inky, image_bytes):
