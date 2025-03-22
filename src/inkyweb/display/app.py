@@ -3,10 +3,8 @@ import os
 from pydantic import BaseModel
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from inky.auto import auto
+
 from inkyweb.display.display import display_image_from_bytes
-
-
-from .dislay import display_image
 
 from loguru import logger
 
