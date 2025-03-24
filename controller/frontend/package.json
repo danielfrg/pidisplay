@@ -1,0 +1,19 @@
+{
+  "name": "pidisplay",
+  "type": "module",
+  "version": "0.99.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/alpinejs": "^0.4.3",
+    "@tailwindcss/vite": "^4.0.15",
+    "@types/alpinejs": "^3.13.11",
+    "alpinejs": "^3.14.9",
+    "astro": "^5.5.4",
+    "tailwindcss": "^4.0.15"
+  }
+}
