@@ -1,11 +1,10 @@
-
 package main
 
 import (
-    "pidisplay/server"
+	"pidisplay/server"
 )
 
-func main(){
-    server := server.New()
-    server.Listen(":3000")
+func main() {
+	server := server.New()
+	server.Listen("localhost:3000")
 }

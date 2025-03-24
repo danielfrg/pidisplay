@@ -5,7 +5,7 @@ default:
 build:
   go build -o tmp/main cmd/main.go
 
-dev:
+server:
   #!/usr/bin/env bash
   if command -v air > /dev/null; then
       air
@@ -21,3 +21,8 @@ dev:
           exit 1
       fi
   fi
+
+
+[working-directory: 'frontend']
+web:
+  bun run dev
