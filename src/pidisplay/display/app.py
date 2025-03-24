@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from inky.auto import auto
 
-from inkyweb.display.display import clear_display, display_image_from_bytes
+from pidisplay.display.display import clear_display, display_image_from_bytes
 
 from loguru import logger
 
@@ -18,7 +18,7 @@ logger.add(
 )
 
 
-DEFAULT_DISPLAY_URL = os.environ.get("INKYWEB_TARGET", "http://localhost")
+DEFAULT_DISPLAY_URL = os.environ.get("PIDISPLAY_TARGET", "http://localhost")
 
 
 app = FastAPI(title="InkiWeb Display", version="0.99.0")
@@ -31,7 +31,7 @@ print("Display resolution:", inky.resolution)
 
 @app.get("/")
 async def root():
-    return {"message": "InkyWeb Display API"}
+    return {"message": "PiDisplay Display API"}
 
 
 # class Update(BaseModel):

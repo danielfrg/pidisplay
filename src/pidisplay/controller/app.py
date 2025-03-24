@@ -6,7 +6,7 @@ from typing import Optional
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 
-from inkyweb.controller.chrome import take_screenshot
+from pidisplay.controller.chrome import take_screenshot
 
 from loguru import logger
 
@@ -22,12 +22,12 @@ app = FastAPI(title="InkiWeb Controller", version="0.99.0")
 
 
 DEFAULT_RESOLUTION = (800, 480)
-DEFAULT_DISPLAY_URL = os.environ.get("INKYWEB_TARGET", "http://192.168.88.202:8000")
+DEFAULT_DISPLAY_URL = os.environ.get("PIDISPLAY_TARGET", "http://192.168.88.202:8000")
 
 
 @app.get("/")
 async def root():
-    return {"message": "InkyWeb Controller API"}
+    return {"message": "PiDisplay Controller API"}
 
 
 class Update(BaseModel):
