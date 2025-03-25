@@ -4,6 +4,7 @@ import sys
 from pydantic import BaseModel
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from inky.auto import auto
+from fastapi.middleware.cors import CORSMiddleware
 
 from pidisplay.display.display import clear_display, display_image_from_bytes
 
@@ -23,6 +24,17 @@ DEFAULT_DISPLAY_URL = os.environ.get("PIDISPLAY_TARGET", "http://localhost")
 
 app = FastAPI(title="InkiWeb Display", version="0.99.0")
 
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # inky = auto(ask_user=True, verbose=True)
 inky = auto()

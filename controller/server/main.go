@@ -13,7 +13,7 @@ func (h *APIHandler) GetDisplays(w http.ResponseWriter, r *http.Request) {
 	user := map[string]interface{}{
 		"id":   1,
 		"name": "inky-7.3",
-		"ip":   "192.168.88.202",
+		"host":   "192.168.88.202:8000",
 	}
 
 	w.Header().Set("Content-Type", "application/json")

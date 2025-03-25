@@ -16,44 +16,70 @@ const API_URL = "http://localhost:3000/api/v1/displays";
     </div>
   </header>
 
-<main class="m-[8px] mx-auto px-[8px] h-[calc(100vh-64px-16px)] max-w-7xl rounded-sm"
-
+  <main class="m-[8px] mx-auto px-[8px] h-[calc(100vh-64px-16px)] max-w-7xl rounded-sm"
         x-data=`{
           displays: [],
           selectedDisplay: null,
+          screenshotPreview: '',
+          capturedImage: null,
           fetchDisplays() {
               fetch("${API_URL}")
-              .then(res => res.json())
-              .then(data => this.displays = Array.isArray(data) ? data : [data])
-              .catch(err => console.error(err));
+                .then(res => res.json())
+                .then(data => this.displays = Array.isArray(data) ? data : [data])
+                .catch(err => console.error(err));
           },
           selectDisplay(display) {
             this.selectedDisplay = display;
+            // Reset screenshot preview and stored image when a new display is selected
+            this.screenshotPreview = '';
+            this.capturedImage = null;
             console.log(this.selectedDisplay);
           },
-          updateDisplay() {
-            // Example: sending an update request using the IP address
+          captureScreenshot() {
             if (!this.selectedDisplay) return;
-            fetch("http://" + this.selectedDisplay.ip + "/update", {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({
-                url: this.selectedDisplay.url,
-                type: this.selectedDisplay.type
+            // Build the screenshot endpoint URL using the selected display's URL
+            const screenshotUrl = "http://localhost:3000/api/v1/screenshot?url=" +
+              encodeURIComponent(this.selectedDisplay.url) +
+              "&width=800&height=480";
+            fetch(screenshotUrl)
+              .then(res => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return res.blob();
               })
+              .then(blob => {
+                // Create an object URL for preview and store the blob for later use
+                this.screenshotPreview = URL.createObjectURL(blob);
+                this.capturedImage = blob;
+                console.log('Screenshot captured');
+              })
+              .catch(err => console.error(err));
+          },
+          updateDisplay() {
+            if (!this.selectedDisplay) return;
+            if (!this.capturedImage) {
+              console.error('No screenshot available to update display.');
+              return;
+            }
+            // Create FormData and append the captured image
+            const formData = new FormData();
+            formData.append('image', this.capturedImage, 'screenshot.png');
+            fetch("http://" + this.selectedDisplay.host + "/display/update", {
+              method: 'POST',
+              body: formData
             })
-            .then(res => res.json())
-            .then(data => console.log('Display updated:', data))
-            .catch(err => console.error(err));
+            .then(res => {
+              if (!res.ok) throw new Error("Display update failed");
+              return res.json();
+            })
+            .then(data => console.log('Display updated with screenshot:', data))
+            .catch(err => console.error('Error updating display:', err));
           }
         }`
         x-init="fetchDisplays()"
   >
     <div class="grid h-full grid-cols-1 grid-cols-4 gap-2 xl:gap-8">
       <!-- List of Displays -->
-      <div
-        class="lg:col-span-1"
-      >
+      <div class="lg:col-span-1">
         <div class="">
           <div class="px-4 py-5">
             <h2 class="text-lg font-medium text-white">Displays</h2>
@@ -67,7 +93,7 @@ const API_URL = "http://localhost:3000/api/v1/displays";
                 <div class="flex items-center justify-between">
                   <span class="text-sm font-medium" x-text="display.name"></span>
                   <div>
-                    <span class="text-sm font-medium" x-text="display.ip"></span>
+                    <span class="text-sm font-medium" x-text="display.host"></span>
                   </div>
                 </div>
               </li>
@@ -78,51 +104,49 @@ const API_URL = "http://localhost:3000/api/v1/displays";
 
       <!-- Display Details -->
       <div class="col-span-3 h-full rounded-lg bg-zinc-900 ring-1 ring-white/12">
-          <div class="px-4 py-5">
-            <div class="flex items-center justify-between">
-              <h2 class="text-lg font-medium text-white">Display Details</h2>
-            </div>
-          </div>
-          <div class="px-4 py-5">
-            <!-- Only show the form if a display is selected -->
-            <div x-show="selectedDisplay" class="grid grid-cols-1 gap-6">
-              <div>
-                <label class="my-label">URL</label>
-                <input
-                  type="text"
-                  class="my-input"
-                  x-model="selectedDisplay.url"
-                  placeholder="https://"
-                />
-              </div>
-              <div>
-                <label class="my-label">Display Type</label>
-                <select class="my-select" x-model="selectedDisplay.type">
-                  <option value="inky-impression-7-3">
-                    Inky Impression 7.3
-                  </option>
-                  <!-- Add more options as needed -->
-                </select>
-              </div>
-              <div>
-                <label class="my-label">Preview</label>
-                <div class="mt-1 rounded-lg border-2 border-dashed border-gray-600 p-12 text-center">
-                  <!-- You can dynamically update the preview based on your needs -->
-                  <span class="mt-2 block text-sm font-medium text-gray-600">
-                    Last updated: 2024-03-15 14:30
-                  </span>
-                </div>
-              </div>
-              <div class="flex justify-end">
-                <button class="my-button" @click="updateDisplay()">Update Display</button>
-              </div>
-            </div>
-            <!-- Optional: Message when no display is selected -->
-            <div x-show="!selectedDisplay" class="text-white">
-              Please select a display from the list.
-            </div>
+        <div class="px-4 py-5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-medium text-white">Display Details</h2>
           </div>
         </div>
+        <div class="px-4 py-5">
+          <!-- Only show the form if a display is selected -->
+          <div x-show="selectedDisplay" class="grid grid-cols-1 gap-6">
+            <div>
+              <label class="my-label">URL</label>
+              <input
+                type="text"
+                class="my-input"
+                x-model="selectedDisplay.url"
+                placeholder="https://"
+              />
+            </div>
+            <div>
+              <label class="my-label">Preview</label>
+              <div class="mt-1 rounded-lg border-2 border-dashed border-gray-600 p-12 text-center">
+                <!-- If a screenshot preview is available, display the image -->
+                <template x-if="screenshotPreview">
+                  <img :src="screenshotPreview" alt="Screenshot Preview" class="mx-auto" />
+                </template>
+                <!-- Fallback text if no screenshot has been captured yet -->
+                <span x-show="!screenshotPreview" class="mt-2 block text-sm font-medium text-gray-600">
+                  No screenshot captured yet.
+                </span>
+              </div>
+            </div>
+            <!-- Two buttons: one to capture a screenshot and one to update the display -->
+            <div class="flex justify-end space-x-2">
+              <button class="my-button" @click="captureScreenshot()">Take Screenshot</button>
+              <button class="my-button" @click="updateDisplay()">Update Display</button>
+            </div>
+          </div>
+          <!-- Optional: Message when no display is selected -->
+          <div x-show="!selectedDisplay" class="text-white">
+            Please select a display from the list.
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 </Layout>
+
