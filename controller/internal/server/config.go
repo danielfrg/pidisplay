@@ -22,9 +22,17 @@ var ConfigData *Config
 
 func init() {
 	configFile := os.Getenv("PIDISPLAY_CONFIG")
-	if configFile == "" {
-		log.Println("PIDISPLAY_CONFIG not set, using default pidisplay.yml")
-		configFile = "pidisplay.yml"
+	if envConfig := os.Getenv("PIDISPLAY_CONFIG"); envConfig != "" {
+		configFile = envConfig
+		log.Printf("Using config file from PIDISPLAY_CONFIG: %s", configFile)
+	} else {
+		if _, err := os.Stat("/config/pidisplay.yml"); err == nil {
+			configFile = "/config/pidisplay.yml"
+			log.Printf("Found config file at /config/pidisplay.yml")
+		} else {
+			configFile = "pidisplay.yml"
+			log.Printf("Using default config file: %s", configFile)
+		}
 	}
 
 	data, err := ioutil.ReadFile(configFile)
