@@ -1,8 +1,8 @@
 package server
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 )

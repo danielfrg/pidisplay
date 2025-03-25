@@ -41,6 +41,7 @@ image-buildx:
 
 [working-directory: 'controller']
 go-fmt:
+  go fmt ./...
 
 [working-directory: 'ansible']
 ansible-display:
