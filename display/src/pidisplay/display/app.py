@@ -48,7 +48,7 @@ async def root():
 
 
 @app.post("/display/update")
-async def update_display(image: UploadFile = File(...)):
+async def display_update(image: UploadFile = File(...)):
     """
     Receives an image file and updates the eInk display
     """
@@ -59,6 +59,11 @@ async def update_display(image: UploadFile = File(...)):
         logger.error("Error reading uploaded image", error=e)
         raise HTTPException(status_code=400, detail="Invalid image data")
 
-    # clear_display(inky)
     display_image_from_bytes(inky, image_bytes)
+    return {"message": "Display updated"}
+
+
+@app.post("/display/clear")
+async def display_clear():
+    clear_display(inky)
     return {"message": "Display updated"}
