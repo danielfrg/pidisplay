@@ -11,14 +11,8 @@ type APIHandler struct{}
 
 // GetDisplays handles retrieving display information
 func (h *APIHandler) GetDisplays(w http.ResponseWriter, r *http.Request) {
-	user := map[string]interface{}{
-		"id":   1,
-		"name": "inky-7.3",
-		"host": "192.168.88.202:8000",
-	}
-
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(ConfigData.Displays)
 }
 
 // GetScreenshot handles taking and returning a screenshot
