@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"pidisplay/server"
+	"pidisplay/internal/server"
 )
 
 // corsMiddleware sets CORS headers for incoming requests.

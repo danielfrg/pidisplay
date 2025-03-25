@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -8,23 +9,23 @@ import (
 
 type APIHandler struct{}
 
-// GetDisplays handles retrieving display information.
+// GetDisplays handles retrieving display information
 func (h *APIHandler) GetDisplays(w http.ResponseWriter, r *http.Request) {
 	user := map[string]interface{}{
 		"id":   1,
 		"name": "inky-7.3",
-		"host":   "192.168.88.202:8000",
+		"host": "192.168.88.202:8000",
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
 
-// GetScreenshot handles taking and returning a screenshot.
+// GetScreenshot handles taking and returning a screenshot
 func (h *APIHandler) GetScreenshot(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 
-	// Get the required "url" query parameter.
+	// Get the required "url" query parameter
 	urlParam := query.Get("url")
 	if urlParam == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -32,12 +33,12 @@ func (h *APIHandler) GetScreenshot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Read optional parameters with defaults.
+	// Read optional parameters with defaults
 	widthStr := query.Get("width")
 	if widthStr == "" {
 		widthStr = "1280"
 	}
-	
+
 	heightStr := query.Get("height")
 	if heightStr == "" {
 		heightStr = "720"
@@ -48,7 +49,7 @@ func (h *APIHandler) GetScreenshot(w http.ResponseWriter, r *http.Request) {
 		binary = "chrome-headless-shell"
 	}
 
-	// Convert width and height to integers.
+	// Convert width and height to integers
 	width, err := strconv.Atoi(widthStr)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -72,33 +73,36 @@ func (h *APIHandler) GetScreenshot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Set the Content-Type header and write the image bytes.
 	w.Header().Set("Content-Type", "image/png")
 	w.Write(imageBytes)
 }
-
 
 // New returns a new http.Handler that serves the API endpoints.
 func New() http.Handler {
 	router := http.NewServeMux()
 
-	// Root endpoint.
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("PiDisplay Controller API"))
-	})
+	// Get the static file handler
+	assetsHandler, err := AssetsHandler()
+	if err != nil {
+		log.Fatalf("Error setting up assets: %v", err)
 
-	displayHandler := &APIHandler{}
+		router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("PiDisplay Controller API"))
+		})
+	} else {
+		// Serve the static files
+		router.Handle("/", assetsHandler)
+	}
 
-	// Register the screenshot endpoint (more specific).
+	apiHandler := &APIHandler{}
+
 	router.HandleFunc("GET /api/v1/screenshot", func(w http.ResponseWriter, r *http.Request) {
-		displayHandler.GetScreenshot(w, r)
+		apiHandler.GetScreenshot(w, r)
 	})
 
-	// Register the display endpoint.
 	router.HandleFunc("GET /api/v1/displays", func(w http.ResponseWriter, r *http.Request) {
-		displayHandler.GetDisplays(w, r)
+		apiHandler.GetDisplays(w, r)
 	})
 
 	return router
 }
-

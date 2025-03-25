@@ -79,7 +79,7 @@ const API_URL = "http://localhost:3000/api/v1/displays";
               <div
                 class="mt-1 rounded-lg border-2 border-dashed border-gray-600 p-2 text-center"
                 x-on:dragover.prevent
-                x-on:drop="handleDrop($event)selectedDisplay"
+                x-on:drop="handleDrop($event)"
               >
                 <!-- If a preview image is available, display it -->
                 <template x-if="previewImage">
@@ -92,7 +92,7 @@ const API_URL = "http://localhost:3000/api/v1/displays";
                 <!-- Fallback text if no image has been provided yet -->
                 <span
                   x-show="!previewImage"
-                  class="mt-2 block text-sm font-medium text-gray-600"
+                  class="m-8 block text-sm font-medium text-gray-600"
                 >
                   No image provided yet. Drag and drop an image here or take a screenshot from an URL.
                 </span>
