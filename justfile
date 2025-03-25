@@ -31,6 +31,9 @@ server:
 web:
   bun run dev
 
+[working-directory: 'controller']
+image:
+  docker buildx build --platform linux/amd64 -t pidisplay-controller .
 
 [working-directory: 'controller']
 go-fmt:
