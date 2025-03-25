@@ -32,7 +32,11 @@ web:
   bun run dev
 
 [working-directory: 'controller']
-image:
+image-build:
+  docker build -t pidisplay-controller .
+
+[working-directory: 'controller']
+image-buildx:
   docker buildx build --platform linux/amd64 -t pidisplay-controller .
 
 [working-directory: 'controller']
