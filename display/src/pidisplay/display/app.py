@@ -1,4 +1,3 @@
-import os
 import sys
 
 from pydantic import BaseModel
@@ -17,9 +16,6 @@ logger.add(
     colorize=True,
     format="<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | {message} | <cyan>{extra}</cyan>",
 )
-
-
-DEFAULT_DISPLAY_URL = os.environ.get("PIDISPLAY_TARGET", "http://localhost")
 
 
 app = FastAPI(title="InkiWeb Display", version="0.99.0")

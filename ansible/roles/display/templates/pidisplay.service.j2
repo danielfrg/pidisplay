@@ -1,0 +1,14 @@
+[Unit]
+Description=PiDisplay Display Service
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/home/{{ ansible_user }}/pidisplay/display
+ExecStart={{ ansible_env.HOME }}/.local/bin/uv run --no-default-groups fastapi dev --host 0.0.0.0 --port 80 src/pidisplay/display/app.py
+Restart=always
+StandardOutput=append:/var/log/pidisplay.log
+StandardError=append:/var/log/pidisplay.log
+
+[Install]
+WantedBy=multi-user.target

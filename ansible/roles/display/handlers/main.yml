@@ -1,0 +1,4 @@
+- name: restart-service
+  ansible.builtin.systemd:
+    name: pidisplay
+    state: restarted

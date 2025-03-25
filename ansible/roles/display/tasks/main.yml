@@ -8,6 +8,14 @@
     - git
   become: true
 
+- name: Clone repo
+  ansible.builtin.git:
+    repo: "https://github.com/danielfrg/pidisplay.git"
+    dest: "{{ ansible_env.HOME }}/pidisplay"
+    version: main
+    update: yes
+  notify: restart-service
+
 - name: Ensure local bin directory exists
   file:
     path: "{{ ansible_env.HOME }}/.local/bin"
@@ -18,6 +26,11 @@
   shell: "curl -LsSf https://astral.sh/uv/install.sh | sh"
   args:
     creates: "{{ ansible_env.HOME }}/.local/bin/uv"
+
+- name: uv sync
+  ansible.builtin.shell:
+    cmd: "{{ ansible_env.HOME }}/.local/bin/uv sync --no-default-groups --group display"
+    chdir: "{{ ansible_env.HOME }}/pidisplay/display"
 
 - name: Enable I2C using raspi-config
   command: "raspi-config nonint do_i2c 0"
@@ -34,3 +47,24 @@
     line: "dtoverlay=spi0-0cs"
     state: present
   become: yes
+
+- name: Create systemd service 
+  become: yes
+  template:
+    src: pidisplay.service.j2
+    dest: /etc/systemd/system/pidisplay.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart-service
+
+- name: Reload systemd daemon
+  become: yes
+  command: systemctl daemon-reload
+
+- name: Enable and start PiDisplay service
+  become: yes
+  systemd:
+    name: pidisplay
+    enabled: yes
+    state: restarted
