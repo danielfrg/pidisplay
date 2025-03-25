@@ -40,7 +40,7 @@ COPY --from=builder /app/main .
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y ca-certificates curl unzip && \
-    apt-get install --no-install-recommends -y libnspr4 libnss3 libexpat1 libfontconfig1 libuuid1 socat \
+    apt-get install --no-install-recommends -y libnspr4 libnss3 libexpat1 libfontconfig1 libuuid1 socat && \
     rm -rf /var/lib/apt/lists/*
 
 # Install chrome-headless-shell
