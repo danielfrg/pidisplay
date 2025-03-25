@@ -93,7 +93,8 @@ import Layout from "../layouts/Layout.astro";
                   x-show="!previewImage"
                   class="m-8 block text-sm font-medium text-gray-600"
                 >
-                  No image provided yet. Drag and drop an image here or take a screenshot from an URL.
+                  No image provided yet. Drag and drop an image here or take a
+                  screenshot from an URL.
                 </span>
               </div>
             </div>
@@ -150,7 +151,8 @@ import Layout from "../layouts/Layout.astro";
         captureScreenshot() {
           if (!this.selectedDisplay) return;
           const screenshotUrl =
-            API_URL + "/screenshot?url=" +
+            API_URL +
+            "/screenshot?url=" +
             encodeURIComponent(this.url) +
             "&width=800&height=480";
           fetch(screenshotUrl)

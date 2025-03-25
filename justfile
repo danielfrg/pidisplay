@@ -43,6 +43,10 @@ image-buildx:
 go-fmt:
   go fmt ./...
 
+[working-directory: 'controller/frontend']
+web-fmt:
+  bun run fmt
+
 [working-directory: 'ansible']
 ansible-display:
   uv run ansible-playbook display.yml
