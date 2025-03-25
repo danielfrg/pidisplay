@@ -67,8 +67,9 @@ import Layout from "../layouts/Layout.astro";
                 <input
                   type="text"
                   class="my-input"
-                  x-model="selectedDisplay.url"
+                  x-model="url"
                   placeholder="https://"
+                  value="https://placehold.co/800x480/000000/FFFFFF/png"
                 />
               </template>
             </div>
@@ -118,13 +119,14 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script>
-  const API_URL = "/api/v1";
-  // const API_URL = "http://localhost:3000/api/v1";
+  // const API_URL = "/api/v1";
+  const API_URL = "http://localhost:3000/api/v1";
 
   document.addEventListener("alpine:init", () => {
     Alpine.data("displayController", () => {
       return {
         displays: [],
+        url: "https://placehold.co/800x480/000000/FFFFFF/png",
         selectedDisplay: null,
         previewImage: "",
         capturedImage: null,
@@ -149,7 +151,7 @@ import Layout from "../layouts/Layout.astro";
           if (!this.selectedDisplay) return;
           const screenshotUrl =
             API_URL + "/screenshot?url=" +
-            encodeURIComponent(this.selectedDisplay.url) +
+            encodeURIComponent(this.url) +
             "&width=800&height=480";
           fetch(screenshotUrl)
             .then((res) => {
