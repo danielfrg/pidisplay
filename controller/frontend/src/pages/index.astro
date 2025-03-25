@@ -1,8 +1,6 @@
 ---
 import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
-
-const API_URL = "http://localhost:3000/api/v1/displays";
 ---
 
 <Layout>
@@ -120,8 +118,9 @@ const API_URL = "http://localhost:3000/api/v1/displays";
 </Layout>
 
 <script>
-  const API_URL = "http://localhost:3000/api/v1";
-  // const API_URL = "/api/v1";
+  const API_URL = "/api/v1";
+  // const API_URL = "http://localhost:3000/api/v1";
+
   document.addEventListener("alpine:init", () => {
     Alpine.data("displayController", () => {
       return {
