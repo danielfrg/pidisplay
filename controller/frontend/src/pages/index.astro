@@ -19,9 +19,9 @@ const API_URL = "http://localhost:3000/api/v1/displays";
   </header>
 
   <main
-    class="mx-auto max-w-7xl rounded-sm m-[8px] h-[calc(100vh-64px-16px)] sm:px-6 lg:px-8"
+    class="m-[8px] mx-auto px-[8px] h-[calc(100vh-64px-16px)] max-w-7xl rounded-sm"
   >
-    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3 h-full">
+    <div class="grid h-full grid-cols-1 grid-cols-4 gap-2 xl:gap-8">
       <div
         class="lg:col-span-1"
         x-data=`{ 
@@ -49,11 +49,7 @@ const API_URL = "http://localhost:3000/api/v1/displays";
                   <span class="text-sm font-medium" x-text="display.name">
                   </span>
                   <div>
-                    <span class="mr-3 text-sm font-medium" x-text="display.ip">
-                    </span>
-                    <span
-                      class="text-green h-[20px] w-[20px] rounded-full bg-green-900 px-3 py-1 text-xs"
-                    >
+                    <span class="text-sm font-medium" x-text="display.ip">
                     </span>
                   </div>
                 </div>
@@ -61,70 +57,53 @@ const API_URL = "http://localhost:3000/api/v1/displays";
             </template>
           </ul>
         </div>
-        </div>
+      </div>
 
-        <!-- Display Details -->
-        <div class="lg:col-span-2 h-full rounded-lg bg-zinc-900  ring-1 ring-white/12 mx-[8px] mb-[8px] ">
-          <div class="">
-            <div class="border-b border-gray-200 px-4 py-5">
-              <div class="flex items-center justify-between">
-                <h2 class="text-lg font-medium text-gray-900">
-                  Display Details
-                </h2>
-              </div>
+      <!-- Display Details -->
+      <div
+        class="col-span-3 h-full rounded-lg bg-zinc-900 ring-1 ring-white/12"
+      >
+        <div class="">
+          <div class="px-4 py-5">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-medium text-white">Display Details</h2>
             </div>
-            <div class="px-4 py-5">
-              <div class="grid grid-cols-1 gap-6">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">
-                    Preview
-                  </label>
-                  <div x-data="{ count: 0 }">
-                    <button x-on:click="count++">Increment</button>
-
-                    <span x-text="count"></span>
-                  </div>
-                  <div
-                    class="mt-1 rounded-lg border-2 border-dashed border-gray-300 p-12 text-center"
-                  >
-                    <span class="mt-2 block text-sm font-medium text-gray-900">
-                      Last updated: 2024-03-15 14:30
-                    </span>
-                  </div>
+          </div>
+          <div class="px-4 py-5">
+            <div class="grid grid-cols-1 gap-6">
+              <div>
+                <label class="my-label"> URL </label>
+                <input
+                  type="text"
+                  class="my-input"
+                  value="https://"
+                />
+              </div>
+              <div>
+                <label class="my-label"> Display Type </label>
+                <select class="my-select">
+                  <option value="inky-impression-7-3">
+                    Inky Impression 7.3
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label class="my-label"> Preview </label>
+                <div
+                  class="mt-1 rounded-lg border-2 border-dashed border-gray-600 p-12 text-center"
+                >
+                  <span class="mt-2 block text-sm font-medium text-gray-600">
+                    Last updated: 2024-03-15 14:30
+                  </span>
                 </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">
-                    Content URL
-                  </label>
-                  <input
-                    type="text"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    value="https://weather.com"
-                  />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">
-                    Display Type
-                  </label>
-                  <select
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  >
-                    <option value="inky-impression-7-3">
-                      Inky Impression 7.3
-                    </option>
-                  </select>
-                </div>
-                <div class="flex justify-end">
-                  <button
-                    class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
-                  >
-                    Update Display
-                  </button>
-                </div>
+              </div>
+              <div class="flex justify-end">
+                <button class="my-button"> Update Display </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
   </main>
 </Layout>
