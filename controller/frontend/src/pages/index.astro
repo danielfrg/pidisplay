@@ -7,7 +7,9 @@ const API_URL = "http://localhost:3000/api/v1/displays";
 
 <Layout>
   <header class="bg-black">
-    <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <div
+      class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
+    >
       <div class="flex items-center space-x-3">
         <h1 class="prose dark:prose-invert text-2xl font-bold">
           PiDisplay Controller
@@ -16,14 +18,15 @@ const API_URL = "http://localhost:3000/api/v1/displays";
     </div>
   </header>
 
-  <main class="m-[8px] mx-auto px-[8px] h-[calc(100vh-64px-16px)] max-w-7xl rounded-sm"
-        x-data="displayController"
-        x-init="fetchDisplays()"
+  <main
+    class="m-[8px] mx-auto h-[calc(100vh-64px-16px)] max-w-7xl rounded-sm px-[8px]"
+    x-data="displayController"
+    x-init="fetchDisplays()"
   >
     <div class="grid h-full grid-cols-1 grid-cols-4 gap-2 xl:gap-8">
       <!-- List of Displays -->
-      <div class="lg:col-span-1">
-        <div class="">
+      <div id="display-list" class="lg:col-span-1">
+        <div>
           <div class="px-4 py-5">
             <h2 class="text-lg font-medium text-white">Displays</h2>
           </div>
@@ -34,9 +37,11 @@ const API_URL = "http://localhost:3000/api/v1/displays";
                 @click="selectDisplay(display)"
               >
                 <div class="flex items-center justify-between">
-                  <span class="text-sm font-medium" x-text="display.name"></span>
+                  <span class="text-sm font-medium" x-text="display.name"
+                  ></span>
                   <div>
-                    <span class="text-sm font-medium" x-text="display.host"></span>
+                    <span class="text-sm font-medium" x-text="display.host"
+                    ></span>
                   </div>
                 </div>
               </li>
@@ -46,7 +51,10 @@ const API_URL = "http://localhost:3000/api/v1/displays";
       </div>
 
       <!-- Display Details -->
-      <div class="col-span-3 h-full rounded-lg bg-zinc-900 ring-1 ring-white/12">
+      <div
+        id="display-details"
+        class="col-span-3 h-full rounded-lg bg-zinc-900 ring-1 ring-white/12"
+      >
         <div class="px-4 py-5">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-medium text-white">Display Details</h2>
@@ -57,33 +65,51 @@ const API_URL = "http://localhost:3000/api/v1/displays";
           <div x-cloak x-show="selectedDisplay" class="grid grid-cols-1 gap-6">
             <div>
               <label class="my-label">URL</label>
-              <input
-                type="text"
-                class="my-input"
-                x-model="selectedDisplay.url"
-                placeholder="https://"
-              />
+              <template x-if="selectedDisplay">
+                <input
+                  type="text"
+                  class="my-input"
+                  x-model="selectedDisplay.url"
+                  placeholder="https://"
+                />
+              </template>
             </div>
             <div>
               <label class="my-label">Preview</label>
-              <div class="mt-1 rounded-lg border-2 border-dashed border-gray-600 p-12 text-center">
-                <!-- If a screenshot preview is available, display the image -->
-                <template x-if="screenshotPreview">
-                  <img :src="screenshotPreview" alt="Screenshot Preview" class="mx-auto" />
+              <div
+                class="mt-1 rounded-lg border-2 border-dashed border-gray-600 p-2 text-center"
+                x-on:dragover.prevent
+                x-on:drop="handleDrop($event)selectedDisplay"
+              >
+                <!-- If a preview image is available, display it -->
+                <template x-if="previewImage">
+                  <img
+                    :src="previewImage"
+                    alt="Image Preview"
+                    class="mx-auto"
+                  />
                 </template>
-                <!-- Fallback text if no screenshot has been captured yet -->
-                <span x-show="!screenshotPreview" class="mt-2 block text-sm font-medium text-gray-600">
-                  No screenshot captured yet.
+                <!-- Fallback text if no image has been provided yet -->
+                <span
+                  x-show="!previewImage"
+                  class="mt-2 block text-sm font-medium text-gray-600"
+                >
+                  No image provided yet. Drag and drop an image here or take a screenshot from an URL.
                 </span>
               </div>
             </div>
-            <!-- Two buttons: one to capture a screenshot and one to update the display -->
-            <div class="flex justify-end space-x-2">
-              <button class="my-button" @click="captureScreenshot()">Take Screenshot</button>
-              <button class="my-button" @click="updateDisplay()">Update Display</button>
+            <!-- Buttons and status indicator -->
+            <div class="flex items-center justify-end space-x-2">
+              <span x-text="updateMessage" class="text-white"></span>
+              <button class="my-button" @click="captureScreenshot()"
+                >Take Screenshot</button
+              >
+              <button class="my-button" @click="updateDisplay()"
+                >Update Display</button
+              >
             </div>
           </div>
-          <!-- Optional: Message when no display is selected -->
+          <!-- Default message when no display is selected -->
           <div x-show="!selectedDisplay" class="text-white">
             Please select a display from the list.
           </div>
@@ -94,71 +120,97 @@ const API_URL = "http://localhost:3000/api/v1/displays";
 </Layout>
 
 <script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.data('displayController', () => {
-      const API_URL = "http://localhost:3000/api/v1/displays";
-
+  const API_URL = "http://localhost:3000/api/v1";
+  // const API_URL = "/api/v1";
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("displayController", () => {
       return {
         displays: [],
         selectedDisplay: null,
-        screenshotPreview: '',
+        previewImage: "",
         capturedImage: null,
-
+        updateMessage: "",
         fetchDisplays() {
-          fetch(API_URL)
-            .then(res => res.json())
-            .then(data => this.displays = Array.isArray(data) ? data : [data])
-            .catch(err => console.error(err));
+          fetch(API_URL + "/displays")
+            .then((res) => res.json())
+            .then(
+              (data) => (this.displays = Array.isArray(data) ? data : [data]),
+            )
+            .catch((err) => console.error(err));
         },
-        
         selectDisplay(display) {
           this.selectedDisplay = display;
-          // Reset screenshot preview and stored image when a new display is selected
-          this.screenshotPreview = '';
-          this.capturedImage = null;
           console.log(this.selectedDisplay);
+          // Reset state
+          this.previewImage = "";
+          this.capturedImage = null;
+          this.updateMessage = "";
         },
-
         captureScreenshot() {
           if (!this.selectedDisplay) return;
-          const screenshotUrl = "http://localhost:3000/api/v1/screenshot?url=" +
+          const screenshotUrl =
+            API_URL + "/screenshot?url=" +
             encodeURIComponent(this.selectedDisplay.url) +
             "&width=800&height=480";
           fetch(screenshotUrl)
-            .then(res => {
+            .then((res) => {
               if (!res.ok) throw new Error("Network response was not ok");
               return res.blob();
             })
-            .then(blob => {
+            .then((blob) => {
               // Create an object URL for preview and store the blob for later use
-              this.screenshotPreview = URL.createObjectURL(blob);
+              this.previewImage = URL.createObjectURL(blob);
               this.capturedImage = blob;
-              console.log('Screenshot captured');
-            })
-            .catch(err => console.error(err));
-        },
 
+              console.log("Screenshot captured");
+            })
+            .catch((err) => console.error(err));
+        },
         updateDisplay() {
           if (!this.selectedDisplay) return;
           if (!this.capturedImage) {
-            console.error('No screenshot available to update display.');
+            console.error("No image available to update display.");
             return;
           }
+          this.updateMessage = "Processing...";
 
           const formData = new FormData();
-          formData.append('image', this.capturedImage, 'screenshot.png');
+          formData.append("image", this.capturedImage, "image.png");
 
           fetch("http://" + this.selectedDisplay.host + "/display/update", {
-            method: 'POST',
-            body: formData
+            method: "POST",
+            body: formData,
           })
-          .then(res => {
-            if (!res.ok) throw new Error("Display update failed");
-            return res.json();
-          })
-          .then(data => console.log('Display updated with screenshot:', data))
-          .catch(err => console.error('Error updating display:', err));
-        }
+            .then((res) => {
+              if (res.ok) {
+                this.updateMessage = `Success: ${res.status}`;
+                return res.json();
+              } else {
+                return res.json().then((err) => {
+                  throw new Error(err.message || "Display update failed");
+                });
+              }
+            })
+            .then((data) => console.log("Display updated with image:", data))
+            .catch((err) => {
+              this.updateMessage = `Error: ${err.message}`;
+              console.error("Error updating display:", err);
+            });
+        },
+        handleDrop(event) {
+          event.preventDefault();
+          const files = event.dataTransfer.files;
+          if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith("image/")) {
+              this.previewImage = URL.createObjectURL(file);
+              this.capturedImage = file;
+              console.log("Image dropped:", file);
+            } else {
+              console.error("Dropped file is not an image.");
+            }
+          }
+        },
       };
     });
   });

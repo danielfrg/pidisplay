@@ -1,10 +1,12 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-[x-cloak] { display: none !important; }
+[x-cloak] {
+  display: none !important;
+}
 
 .my-label {
-    @apply text-base/6 text-zinc-950 select-none data-disabled:opacity-50 sm:text-sm/6 dark:text-white
+  @apply text-base/6 text-zinc-950 select-none data-disabled:opacity-50 sm:text-sm/6 dark:text-white;
 }
 
 .my-input {
@@ -12,7 +14,7 @@
   @apply text-base/6 text-zinc-950 placeholder:text-zinc-500 sm:text-sm/6 dark:text-white;
   @apply border border-zinc-950/10 hover:border-zinc-950/20 dark:border-white/10 dark:hover:border-white/20;
   @apply bg-transparent dark:bg-white/5;
-  @apply focus:outline-hidden focus:ring-2 focus:ring-blue-500;
+  @apply focus:ring-2 focus:ring-blue-500 focus:outline-hidden;
   @apply data-invalid:border-red-500 data-invalid:hover:border-red-500 dark:data-invalid:border-red-500 dark:data-invalid:hover:border-red-500;
   @apply data-disabled:border-zinc-950/20 dark:data-disabled:border-white/15 dark:data-disabled:bg-white/[2.5%] dark:hover:data-disabled:border-white/15;
   @apply dark:[color-scheme:dark];
@@ -20,13 +22,13 @@
 
 .my-select {
   @apply relative block w-full appearance-none rounded-lg;
-  @apply py-2 sm:py-1 pr-9 pl-3 sm:pr-8 sm:pl-2.5;
+  @apply py-2 pr-9 pl-3 sm:py-1 sm:pr-8 sm:pl-2.5;
   @apply text-base/6 text-zinc-950 placeholder:text-zinc-500 sm:text-sm/6;
   @apply dark:text-white;
   @apply border border-zinc-950/10 data-hover:border-zinc-950/20;
   @apply dark:border-white/10 dark:data-hover:border-white/20;
   @apply bg-transparent dark:bg-white/5;
-  @apply focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  @apply focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden;
   @apply data-invalid:border-red-500 data-invalid:hover:border-red-500;
   @apply dark:data-invalid:border-red-600 dark:data-invalid:hover:border-red-600;
   @apply data-disabled:border-zinc-950/20 data-disabled:opacity-100;
@@ -35,54 +37,54 @@
 }
 
 .my-button {
-        /* Layout and basic structure */
-    @apply relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg;
+  /* Layout and basic structure */
+  @apply relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg;
 
-    /* Border, typography, and spacing */
-    @apply border text-base/6 font-semibold;
-    @apply px-[calc(--spacing(3.5)-1px)] py-[calc(--spacing(2.5)-1px)];
-    @apply sm:px-[calc(--spacing(3)-1px)] sm:py-[calc(--spacing(1.5)-1px)] sm:text-sm/6;
+  /* Border, typography, and spacing */
+  @apply border text-base/6 font-semibold;
+  @apply px-[calc(--spacing(3.5)-1px)] py-[calc(--spacing(2.5)-1px)];
+  @apply sm:px-[calc(--spacing(3)-1px)] sm:py-[calc(--spacing(1.5)-1px)] sm:text-sm/6;
 
-    /* Focus states */
-    @apply focus:outline-hidden data-focus:outline data-focus:outline-2 data-focus:outline-offset-2 data-focus:outline-blue-500;
+  /* Focus states */
+  @apply focus:outline-hidden data-focus:outline data-focus:outline-2 data-focus:outline-offset-2 data-focus:outline-blue-500;
 
-    /* Disabled state */
-    @apply data-disabled:opacity-50;
+  /* Disabled state */
+  @apply data-disabled:opacity-50;
 
-    /* Icon slot styling */
-    @apply *:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5;
-    @apply *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0;
-    @apply *:data-[slot=icon]:self-center *:data-[slot=icon]:text-(--btn-icon);
-    @apply sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-4;
+  /* Icon slot styling */
+  @apply *:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5;
+  @apply *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0;
+  @apply *:data-[slot=icon]:self-center *:data-[slot=icon]:text-(--btn-icon);
+  @apply sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-4;
 
-    /* Forced colors for icons */
-    @apply forced-colors:[--btn-icon:ButtonText] forced-colors:data-hover:[--btn-icon:ButtonText];
+  /* Forced colors for icons */
+  @apply forced-colors:[--btn-icon:ButtonText] forced-colors:data-hover:[--btn-icon:ButtonText];
 
-    /* Background and border color variables */
-    @apply border-transparent bg-(--btn-border);
-    @apply dark:bg-(--btn-bg);
+  /* Background and border color variables */
+  @apply border-transparent bg-(--btn-border);
+  @apply dark:bg-(--btn-bg);
 
-    /* Before pseudo-element (background and shadow) */
-    @apply before:absolute before:inset-0 before:-z-10;
-    @apply before:rounded-[calc(var(--radius-lg)-1px)] before:bg-(--btn-bg) before:shadow-sm;
-    @apply dark:before:hidden dark:border-white/5;
+  /* Before pseudo-element (background and shadow) */
+  @apply before:absolute before:inset-0 before:-z-10;
+  @apply before:rounded-[calc(var(--radius-lg)-1px)] before:bg-(--btn-bg) before:shadow-sm;
+  @apply dark:border-white/5 dark:before:hidden;
 
-    /* After pseudo-element (hover overlay and inset shadow) */
-    @apply after:absolute after:inset-0 after:-z-10;
-    @apply after:rounded-[calc(var(--radius-lg)-1px)] after:shadow-[shadow:inset_0_1px_--theme(--color-white/15%)];
-    @apply data-active:after:bg-(--btn-hover-overlay) data-hover:after:bg-(--btn-hover-overlay);
-    @apply dark:after:-inset-px dark:after:rounded-lg;
-    @apply data-disabled:before:shadow-none data-disabled:after:shadow-none;
+  /* After pseudo-element (hover overlay and inset shadow) */
+  @apply after:absolute after:inset-0 after:-z-10;
+  @apply after:rounded-[calc(var(--radius-lg)-1px)] after:shadow-[shadow:inset_0_1px_--theme(--color-white/15%)];
+  @apply data-active:after:bg-(--btn-hover-overlay) data-hover:after:bg-(--btn-hover-overlay);
+  @apply dark:after:-inset-px dark:after:rounded-lg;
+  @apply data-disabled:before:shadow-none data-disabled:after:shadow-none;
 
-    /* Text and CSS variable declarations */
-    @apply text-white;
-    @apply [--btn-bg:var(--color-zinc-900)] [--btn-border:var(--color-zinc-950)]/90;
-    @apply [--btn-hover-overlay:var(--color-white)]/10;
-    @apply dark:text-white dark:[--btn-bg:var(--color-zinc-600)];
-    @apply dark:[--btn-hover-overlay:var(--color-white)]/5;
-    @apply [--btn-icon:var(--color-zinc-400)];
-    @apply data-active:[--btn-icon:var(--color-zinc-300)] data-hover:[--btn-icon:var(--color-zinc-300)];
+  /* Text and CSS variable declarations */
+  @apply text-white;
+  @apply [--btn-bg:var(--color-zinc-900)] [--btn-border:var(--color-zinc-950)]/90;
+  @apply [--btn-hover-overlay:var(--color-white)]/10;
+  @apply dark:text-white dark:[--btn-bg:var(--color-zinc-600)];
+  @apply dark:[--btn-hover-overlay:var(--color-white)]/5;
+  @apply [--btn-icon:var(--color-zinc-400)];
+  @apply data-active:[--btn-icon:var(--color-zinc-300)] data-hover:[--btn-icon:var(--color-zinc-300)];
 
-    /* Cursor style */
-    @apply cursor-default;
+  /* Cursor style */
+  @apply cursor-default;
 }
