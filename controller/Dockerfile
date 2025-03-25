@@ -29,15 +29,24 @@ RUN bun install && bun run build
 WORKDIR /app
 RUN ( go mod download || true )&& go build -o main ./cmd/main.go
 
+# =============================================================================
 # Stage: Final runtime image
+
 FROM alpine:latest
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates curl unzip
 
 WORKDIR /app
 
 # Copy the Go binary and built frontend assets from the builder stage
 COPY --from=builder /app/main .
 COPY --from=builder /app/internal/server/dist ./dist
+
+RUN curl -fsSL https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chrome-headless-shell-linux64.zip -o chrome.zip && \
+    mkdir /chrome && \
+    unzip chrome.zip -d /chrome && \
+    rm chrome.zip
+
+ENV PATH="/chrome/chrome-headless-shell-linux64:${PATH}"
 
 ENV PIDISPLAY_HOST=0.0.0.0
 ENV PIDISPLAY_PORT=3000
