@@ -1,5 +1,5 @@
 # Stage: Build
-FROM debian:bookworm AS builder
+FROM debian:bookworm-slim AS builder
 
 RUN apt-get update && apt-get install -y curl git tar unzip && rm -rf /var/lib/apt/lists/*
 
@@ -39,7 +39,8 @@ WORKDIR /app
 COPY --from=builder /app/main .
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates curl unzip && \
+    apt-get install --no-install-reocmmends -y ca-certificates curl unzip && \
+    apt-get install --no-install-recommends -y libnspr4 libnss3 libexpat1 libfontconfig1 libuuid1 socat \
     rm -rf /var/lib/apt/lists/*
 
 # Install chrome-headless-shell
