@@ -1,6 +1,6 @@
 import io
 import time
-from PIL import Image
+from PIL import Image, ImageOps
 
 from inky.inky_uc8159 import CLEAN
 
@@ -11,11 +11,18 @@ def clear_display(inky):
             inky.set_pixel(x, y, CLEAN)
 
     inky.show()
-    time.sleep(1.0)
 
 
-def display_image_from_bytes(inky, image_bytes: bytes, saturation: float = -1):
+def display_image_from_bytes(inky, image_bytes: bytes, saturation: float = -1, rotation: int = 0):
     image = Image.open(io.BytesIO(image_bytes))
+
+    # Apply rotation if specified
+    if rotation == 90:
+        image = image.transpose(Image.ROTATE_90)
+    elif rotation == 180:
+        image = image.transpose(Image.ROTATE_180)
+    elif rotation == 270:
+        image = image.transpose(Image.ROTATE_270)
 
     resized_image = image.resize(inky.resolution)
 

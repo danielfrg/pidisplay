@@ -1,7 +1,7 @@
 import sys
 
 from pydantic import BaseModel
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from inky.auto import auto
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -48,9 +48,16 @@ async def root():
 
 
 @app.post("/display/update")
-async def display_update(image: UploadFile = File(...)):
+async def display_update(
+    image: UploadFile = File(...),
+    rotation: int = Form(0)
+):
     """
     Receives an image file and updates the eInk display
+
+    Parameters:
+    - image: The image file to display
+    - rotation: Optional rotation angle in degrees (0, 90, 180, or 270)
     """
 
     try:
@@ -59,7 +66,7 @@ async def display_update(image: UploadFile = File(...)):
         logger.error("Error reading uploaded image", error=e)
         raise HTTPException(status_code=400, detail="Invalid image data")
 
-    display_image_from_bytes(inky, image_bytes)
+    display_image_from_bytes(inky, image_bytes, rotation=rotation)
     return {"message": "Display updated"}
 
 
