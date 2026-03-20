@@ -1,13 +1,15 @@
 {
   "name": "pidisplay",
-  "type": "module",
   "version": "0.99.0",
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "fmt": "prettier --write ."
+    "fmt": "vp fmt --write",
+    "fmt:check": "vp fmt --check",
+    "lint": "vp lint --config oxlint.config.json"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.3",
@@ -15,12 +17,16 @@
     "@types/alpinejs": "^3.13.11",
     "alpinejs": "^3.14.9",
     "astro": "^5.5.4",
-    "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.0.15"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16",
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11"
+    "@tailwindcss/typography": "^0.5.16"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }

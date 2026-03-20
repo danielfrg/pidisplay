@@ -7,7 +7,7 @@ build:
 
 [working-directory: 'controller/frontend']
 build-web:
-  bun run build
+  vp run build
 
 [working-directory: 'controller']
 server:
@@ -29,7 +29,7 @@ server:
 
 [working-directory: 'controller/frontend']
 web:
-  bun run dev
+  vp run dev
 
 [working-directory: 'controller']
 image-build:
@@ -45,7 +45,11 @@ go-fmt:
 
 [working-directory: 'controller/frontend']
 web-fmt:
-  bun run fmt
+  vp fmt --write
+
+[working-directory: 'controller/frontend']
+web-lint:
+  vp lint --config oxlint.config.json
 
 [working-directory: 'ansible']
 ansible-display:

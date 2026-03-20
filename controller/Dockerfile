@@ -10,15 +10,17 @@ RUN curl -fsSL https://go.dev/dl/go1.24.1.linux-amd64.tar.gz -o go.tar.gz && \
     rm go.tar.gz
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-# Install Bun
-RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.6"
-ENV PATH="/root/.bun/bin:${PATH}"
+# Install Node.js 24
+RUN curl -fsSL https://nodejs.org/dist/v24.3.0/node-v24.3.0-linux-x64.tar.xz -o node.tar.xz && \
+    tar -xJf node.tar.xz -C /usr/local --strip-components=1 && \
+    rm node.tar.xz
+RUN corepack enable
 
 # Build frontend
 COPY frontend/ /app/frontend/
 WORKDIR /app/frontend
 
-RUN bun install && bun run build
+RUN pnpm install --frozen-lockfile && pnpm run build
 
 # Build Go server
 WORKDIR /app
