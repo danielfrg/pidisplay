@@ -1,7 +1,7 @@
 # Stage: Build
 FROM debian:bookworm-slim AS builder
 
-RUN apt-get update && apt-get install -y curl git tar unzip xz-utils && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl git tar unzip xz-utils libatomic1 && rm -rf /var/lib/apt/lists/*
 
 # Install Go from the official tarball
 RUN curl -fsSL https://go.dev/dl/go1.24.1.linux-amd64.tar.gz -o go.tar.gz && \
