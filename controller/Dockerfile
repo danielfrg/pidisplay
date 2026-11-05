@@ -4,7 +4,7 @@ FROM debian:bookworm-slim AS builder
 RUN apt-get update && apt-get install -y curl git tar unzip xz-utils libatomic1 && rm -rf /var/lib/apt/lists/*
 
 # Install Go from the official tarball
-RUN curl -fsSL https://go.dev/dl/go1.24.1.linux-amd64.tar.gz -o go.tar.gz && \
+RUN curl -fsSL https://go.dev/dl/go1.27.2.linux-amd64.tar.gz -o go.tar.gz && \
     rm -rf /usr/local/go && \
     tar -C /usr/local -xzf go.tar.gz && \
     rm go.tar.gz

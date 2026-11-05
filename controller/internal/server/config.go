@@ -1,11 +1,10 @@
 package server
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
@@ -35,7 +34,7 @@ func init() {
 		}
 	}
 
-	data, err := ioutil.ReadFile(configFile)
+	data, err := os.ReadFile(configFile)
 	if err != nil {
 		log.Fatalf("Error reading config file %s: %v", configFile, err)
 	}
