@@ -9,7 +9,8 @@
     "astro": "astro",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "check": "astro check"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.3",
@@ -20,6 +21,7 @@
     "tailwindcss": "^4.0.15"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
     "@astrojs/compiler-rs": "^0.5.2",
     "@astrojs/language-server": "^2.17.3",
     "@tailwindcss/language-server": "^0.16.0",
