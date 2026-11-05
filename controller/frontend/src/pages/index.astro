@@ -5,13 +5,9 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout>
   <header class="bg-black">
-    <div
-      class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
-    >
+    <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
       <div class="flex items-center space-x-3">
-        <h1 class="prose dark:prose-invert text-2xl font-bold">
-          PiDisplay Controller
-        </h1>
+        <h1 class="prose dark:prose-invert text-2xl font-bold">PiDisplay Controller</h1>
       </div>
     </div>
   </header>
@@ -35,11 +31,9 @@ import Layout from "../layouts/Layout.astro";
                 @click="selectDisplay(display)"
               >
                 <div class="flex items-center justify-between">
-                  <span class="text-sm font-medium" x-text="display.name"
-                  ></span>
+                  <span class="text-sm font-medium" x-text="display.name"></span>
                   <div>
-                    <span class="text-sm font-medium" x-text="display.host"
-                    ></span>
+                    <span class="text-sm font-medium" x-text="display.host"></span>
                   </div>
                 </div>
               </li>
@@ -82,31 +76,24 @@ import Layout from "../layouts/Layout.astro";
               >
                 <!-- If a preview image is available, display it -->
                 <template x-if="previewImage">
-                  <img
-                    :src="previewImage"
-                    alt="Image Preview"
-                    class="mx-auto"
-                  />
+                  <img :src="previewImage" alt="Image Preview" class="mx-auto" />
                 </template>
                 <!-- Fallback text if no image has been provided yet -->
-                <span
-                  x-show="!previewImage"
-                  class="m-8 block text-sm font-medium text-gray-600"
-                >
-                  No image provided yet. Drag and drop an image here or take a
-                  screenshot from an URL.
+                <span x-show="!previewImage" class="m-8 block text-sm font-medium text-gray-600">
+                  No image provided yet. Drag and drop an image here or take a screenshot from an
+                  URL.
                 </span>
               </div>
             </div>
             <!-- Buttons and status indicator -->
             <div class="flex items-center justify-end space-x-2">
               <span x-text="updateMessage" class="text-white"></span>
-              <button class="my-button" @click="captureScreenshot()"
-                >Take Screenshot</button
-              >
-              <button class="my-button" @click="updateDisplay()"
-                >Update Display</button
-              >
+              <button class="my-button" @click="captureScreenshot()">
+                Take Screenshot
+              </button>
+              <button class="my-button" @click="updateDisplay()">
+                Update Display
+              </button>
             </div>
           </div>
           <!-- Default message when no display is selected -->
@@ -135,9 +122,7 @@ import Layout from "../layouts/Layout.astro";
         fetchDisplays() {
           fetch(API_URL + "/displays")
             .then((res) => res.json())
-            .then(
-              (data) => (this.displays = Array.isArray(data) ? data : [data]),
-            )
+            .then((data) => (this.displays = Array.isArray(data) ? data : [data]))
             .catch((err) => console.error(err));
         },
         selectDisplay(display) {
@@ -151,10 +136,7 @@ import Layout from "../layouts/Layout.astro";
         captureScreenshot() {
           if (!this.selectedDisplay) return;
           const screenshotUrl =
-            API_URL +
-            "/screenshot?url=" +
-            encodeURIComponent(this.url) +
-            "&width=800&height=480";
+            API_URL + "/screenshot?url=" + encodeURIComponent(this.url) + "&width=800&height=480";
           fetch(screenshotUrl)
             .then((res) => {
               if (!res.ok) throw new Error("Network response was not ok");
