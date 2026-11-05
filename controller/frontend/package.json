@@ -7,22 +7,27 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "fmt": "oxfmt --write",
+    "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "lint": "oxlint --config oxlint.config.json"
+    "lint": "oxlint"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.3",
     "@tailwindcss/vite": "^4.0.15",
     "@types/alpinejs": "^3.13.11",
     "alpinejs": "^3.14.9",
-    "astro": "^5.5.4",
+    "astro": "^5.17.3",
     "tailwindcss": "^4.0.15"
   },
   "devDependencies": {
+    "@astrojs/compiler-rs": "^0.5.2",
+    "@astrojs/language-server": "^2.17.3",
+    "@tailwindcss/language-server": "^0.16.0",
     "@tailwindcss/typography": "^0.5.16",
-    "oxfmt": "0.74.0",
-    "oxlint": "1.89.0"
+    "oxfmt": "^0.76.0",
+    "oxlint": "^1.91.0",
+    "typescript": "^6.0.3",
+    "typescript-language-server": "^6.0.3"
   },
   "engines": {
     "node": ">=26.0.0 <27",
